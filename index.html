@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css">
+
+<style>
+    .slider{
+  margin: 0 0 20px 0;
+}
+.slider__item{
+  position: relative;
+  width: 600px;
+  height: 400px;
+  transition: all 0.5s; 
+  overflow: hidden;
+}
+.slider__item .text{
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: none;
+  color: #FFF;
+  text-shadow: 0 0 2px #FFF;
+}
+.slider__item.animate__animated .text{
+  display: block;
+}
+.slider__item img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dots{
+  display: flex;
+  margin: 20px 0;
+}
+.dot{
+  width: 8px;
+  height: 8px;
+  margin: 0 5px;
+  border-radius: 50%;
+  border: 1px solid;
+  cursor: pointer;
+}
+.dot-active{
+  background: black;
+}
+.progressbar{
+  width: 400px;
+  height: 4px;
+  border: 1px solid;
+  box-sizing: border-box;
+}
+.progressline{
+  width: 25%;
+  height: 100%;
+  background: red;
+  transition: all 1s;
+}
+
+</style>
+
+</head>
+<body>
+    
+    <div class="slider">
+        <div class="slider__line">
+          <div class="slider__item">
+            <img src="https://i.pinimg.com/originals/47/15/67/471567c282d2e1c844fef39e63e0abba.jpg" alt="">
+            <div class="text animate__animated animate__slideInDown" >Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ipsa perspiciatis hic accusamus soluta ex, facilis iusto, incidunt delectus eos deserunt nesciunt! Deleniti similique quibusdam pariatur praesentium blanditiis modi. Nobis.</div>
+          </div> 
+          <div class="slider__item">
+            <img src="https://images.hdqwalls.com/wallpapers/bthumb/resident-evil-2-2019-4k-5a.jpg" alt="">
+            <div class="text animate__animated animate__zoomIn" >Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ipsa perspiciatis hic accusamus soluta ex, facilis iusto, incidunt delectus eos deserunt nesciunt! Deleniti similique quibusdam pariatur praesentium blanditiis modi. Nobis.</div>
+          </div> 
+          <div class="slider__item">
+            <img src="https://free4kwallpapers.com/uploads/originals/2020/05/02/game-art-wallpaper.jpg" alt="">
+            <div class="text animate__animated animate__jackInTheBox" >Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ipsa perspiciatis hic accusamus soluta ex, facilis iusto, incidunt delectus eos deserunt nesciunt! Deleniti similique quibusdam pariatur praesentium blanditiis modi. Nobis.</div>
+          </div>
+          <div class="slider__item">
+            <img src="https://xage.ru/media/posts/2019/8/26/26-minutes-of-gameplay-dying-light-2-in-4k-trailer_BOLSTko.jpg" alt="">
+            <div class="text animate__animated animate__rotateIn" >Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ipsa perspiciatis hic accusamus soluta ex, facilis iusto, incidunt delectus eos deserunt nesciunt! Deleniti similique quibusdam pariatur praesentium blanditiis modi. Nobis.</div>
+          </div>
+          <div class="slider__item">
+            <img src="https://tes-game.ru/_nw/14/08884847.jpg" alt="">
+            <div class="text animate__animated animate__zoomIn" >Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ipsa perspiciatis hic accusamus soluta ex, facilis iusto, incidunt delectus eos deserunt nesciunt! Deleniti similique quibusdam pariatur praesentium blanditiis modi. Nobis.</div>
+          </div> 
+        </div>
+      </div>
+      <button class="prev">prev</button>
+      <button class="next">next</button>
+      <div class="dots">
+        <div class="dot dot-active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="progressbar">
+        <div class="progressline"></div>
+      </div>
+
+<script>
+
+let slideIndex = 0,
+    slides = document.querySelectorAll('.slider__item'),
+    prev = document.querySelector('.prev'),
+    next = document.querySelector('.next'),
+    dotsWrap = document.querySelector('.dots'),
+    dots = document.querySelectorAll('.dot'),
+    autoPlay = setInterval(function(){
+      nextSlide(1);
+    }, 3000);
+
+let progressBar = document.querySelector('.progressbar'),
+    progressLine = document.querySelector('.progressline'),
+    width = progressBar.offsetWidth,
+    widthPath = width / slides.length -1;
+
+goSlide(slideIndex);
+
+function goSlide(n){
+  
+  if( n > slides.length -1 ){
+    slideIndex = 0;
+  }
+  if( n < 0 ){
+    slideIndex = slides.length -1;
+  }
+  
+  slides.forEach( item => {
+    item.style.display = 'none'; 
+    item.classList.remove('animate__animated', 'animate__fadeIn');
+  });
+  dots.forEach( item => {
+    item.classList.remove('dot-active');
+  });
+  
+  progressLine.style.width = widthPath * (slideIndex + 1) + 'px';
+  slides[slideIndex].style.display = 'block';
+  slides[slideIndex].classList.add('animate__animated', 'animate__fadeIn');
+  dots[slideIndex].classList.add('dot-active');
+  
+}
+
+function nextSlide(n){
+  goSlide(slideIndex += n);
+}
+
+function currentSlide(n){
+  goSlide(slideIndex = n);
+}
+
+prev.addEventListener('click', function(){
+  clearInterval(autoPlay);
+  nextSlide(-1);
+});
+next.addEventListener('click', function(){
+  clearInterval(autoPlay);
+  nextSlide(1);
+});
+
+dots.forEach( (item, i) => {
+  item.addEventListener('click', function(e){
+    clearInterval(autoPlay);
+      if( e.target == dots[i] )
+        currentSlide(i);
+  }); 
+});
+
+</script>
+
+</body>
+</html>
